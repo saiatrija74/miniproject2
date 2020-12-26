@@ -28,6 +28,6 @@ public interface UserRegistrationService {
 
 	// Forgot password functionality
 
-	public boolean forgotPassowrd(String email);
+	public String forgotPassowrd(String email);
 
 }

@@ -35,7 +35,7 @@ public class UserRegisterController {
 	}
 
 	@GetMapping(value = "/states/{countryId}", produces = { "application/json" })
-	public ResponseEntity<Map<Integer, String>> getStates(@PathParam("countryId") Integer countryId) {
+	public ResponseEntity<Map<Integer, String>> getStates(@PathVariable("countryId") Integer countryId) {
 		Map<Integer, String> stateByCountry = userRegistrationService.getStateByCountry(countryId);
 		return new ResponseEntity<Map<Integer, String>>(stateByCountry, HttpStatus.OK);
 	}

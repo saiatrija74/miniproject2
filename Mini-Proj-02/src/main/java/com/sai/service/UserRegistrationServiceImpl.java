@@ -86,13 +86,10 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 	public boolean signup(UserRegistrationModel usermodel) {
 		UserRegistrationEntity entity = new UserRegistrationEntity();
 		BeanUtils.copyProperties(usermodel, entity);
-		entity.setAcc_Status("N");
+		entity.setAcc_Status("LOCKED");
 		entity.setPassword(getTempPassword());
 		UserRegistrationEntity save = userRegistrationrepo.save(entity);
-		if (save.getRegId() > 0) {
-			return true;
-		}
-		return false;
+		return save.getRegId() != null;
 	}
 
 	// Temp password generation
@@ -113,11 +110,11 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 		Optional<UserRegistrationEntity> findByEmail = userRegistrationrepo.findByEmail(email);
 		String msg = "";
 		if (findByEmail.isPresent()) {
-			if (findByEmail.get().getAcc_Status() == "N")
-				msg = "Email id is not activated yet!!!";
+			if (findByEmail.get().getAcc_Status() == "LOCKED")
+				msg = "Account locked!!!";
 			else if ((findByEmail.get().getEmail().equalsIgnoreCase(email)
 					&& findByEmail.get().getPassword().equals(password))) {
-				return "homepage";
+				return "Login success";
 			} else {
 				msg = "Credentials are in correct";
 			}
@@ -133,12 +130,18 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 		String msg = "";
 		Optional<UserRegistrationEntity> findByEmail = userRegistrationrepo.findByEmail(email);
 		if (findByEmail.get().getPassword().equals(tempPassword)) {
-			if (findByEmail.get().getAcc_Status() == "N") {
+			if (findByEmail.get().getAcc_Status() == "LOCKED") {
 				UserRegistrationEntity userRegistrationEntity = findByEmail.get();
-				userRegistrationEntity.setAcc_Status("Y");
+				userRegistrationEntity.setAcc_Status("UNLOCKED");
 				userRegistrationEntity.setPassword(newpassword);
-				userRegistrationrepo.save(userRegistrationEntity);
-				msg = "Account is Unlocked";
+				try {
+					userRegistrationrepo.save(userRegistrationEntity);
+					msg = "Account is Unlocked";
+				} catch (Exception e) {
+					e.printStackTrace();
+					msg = "Account Unlock failed";
+				}
+
 			} else {
 				msg = "Account is already unlocked";
 			}
@@ -149,13 +152,13 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 	}
 
 	@Override
-	public boolean forgotPassowrd(String email) {
+	public String forgotPassowrd(String email) {
 		Optional<UserRegistrationEntity> findByEmail = userRegistrationrepo.findByEmail(email);
 		if (findByEmail.isPresent()) {
 
-			return true;
+			return findByEmail.get().getPassword();
 		}
-		return false;
+		return null;
 	}
 
 }

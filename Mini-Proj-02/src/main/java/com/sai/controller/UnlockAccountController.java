@@ -20,7 +20,7 @@ public class UnlockAccountController {
 				unlockaccount.getTempPassword(), unlockaccount.getNewPassword());
 		return unlockAcc;
 	}
-	
+
 	/*
 	 * @GetMapping(value = "/unlockaccount/{emailId}", produces =
 	 * "application/json") public String unlockAcc(@PathVariable("emailId") String

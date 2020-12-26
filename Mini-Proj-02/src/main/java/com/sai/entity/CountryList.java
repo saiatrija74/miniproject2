@@ -20,5 +20,7 @@ public class CountryList {
 	private Integer countryId;
 	@Column(name = "COUNTRY_NAME")
 	private String country;
+	@Column(name = "COUNTRY_CODE")
+	private String countrycode;
 
 }
