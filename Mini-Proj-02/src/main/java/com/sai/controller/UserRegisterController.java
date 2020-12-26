@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sai.model.UserRegistrationModel;
 import com.sai.service.UserRegistrationService;
 
-@RestController("/register")
+@RestController
+@RequestMapping("/register")
 public class UserRegisterController {
 
 	@Autowired
