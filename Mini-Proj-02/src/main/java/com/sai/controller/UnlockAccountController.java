@@ -9,12 +9,13 @@ import com.sai.model.UnlockAccountModel;
 import com.sai.service.UserRegistrationService;
 
 @RestController
+@RequestMapping("/unlock")
 public class UnlockAccountController {
 
 	@Autowired
 	private UserRegistrationService userRegistrationService;
 
-	@PostMapping(value = "/unlockaccount", produces = "application/json", consumes = "application/json")
+	@PostMapping(value = "/account", produces = "application/json", consumes = "application/json")
 	public String unclockAccount(@RequestBody UnlockAccountModel unlockaccount) {
 		String unlockAcc = userRegistrationService.unlockAccount(unlockaccount.getEmailId(),
 				unlockaccount.getTempPassword(), unlockaccount.getNewPassword());
